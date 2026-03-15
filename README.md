@@ -88,7 +88,7 @@
 
 # Итог:
 
-![Картинка1](./python_labs_is_back-1/src/images/lab01_img/laba.jpg)
+![Картинка1](/src/images/lab01_img/laba.png)
 
 
   
