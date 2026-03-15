@@ -86,8 +86,9 @@
 | training_level           | Установка рекорда выше допустимого        | ValueError с указанием максимума             |
 | morale                   | Установка значения вне [0,10]             | ValueError    
 
+# Итог:
 
-
+![Картинка1](./python_labs_is_back-1/src/images/lab01_img/laba.jpg)
 
 
   

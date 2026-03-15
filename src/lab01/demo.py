@@ -1,6 +1,6 @@
 
 
-from lab01.model import Athlete
+from src.lab01.model import Athlete
 
 def demo_validation():
     """Сценарий 1: базовая валидация."""
