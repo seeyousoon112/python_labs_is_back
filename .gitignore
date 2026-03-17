@@ -239,4 +239,4 @@ Temporary Items
 # iCloud generated files
 *.icloud
 
-.DS_Store
+.DS_Store.DS_Store
