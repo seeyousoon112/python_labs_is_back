@@ -1,9 +1,9 @@
-
 import sys
 import os
 
 # Добавляем корневую директорию проекта в путь поиска модулей
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
 from . import validate
 
 class Athlete:

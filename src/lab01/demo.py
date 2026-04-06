@@ -1,5 +1,9 @@
 
+import sys
+import os
 
+# Добавляем корневую директорию проекта в путь поиска модулей
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from src.lab01.model import Athlete
 
 def demo_validation():
