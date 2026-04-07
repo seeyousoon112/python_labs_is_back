@@ -1,7 +1,5 @@
-"""
-Контейнерный класс AthleteCollection для хранения объектов Athlete.
-Реализует требования ЛР-2 
-"""
+
+
 import sys
 import os
 
