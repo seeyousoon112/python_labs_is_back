@@ -45,7 +45,7 @@ class AthleteCollection:
 
     # ------------------- Методы для оценки 4 -------------------
     def find_by_name(self, name):
-        """Найти всех спортсменов с точным совпадением имени (регистр учитывается)."""
+        """Найти всех спортсменов с точным совпадением имени (регистр + )."""
         return [a for a in self._items if a.name == name]
 
     def find_by_record(self, min_record=None, max_record=None):
@@ -74,14 +74,13 @@ class AthleteCollection:
         return len(self._items)
 
     def __iter__(self):
-        """Итератор по коллекции."""
+        """циклище по коллекции."""
         return iter(self._items)
 
     # ------------------- Методы для оценки 5 -------------------
     def __getitem__(self, index):
         """
         Поддержка индексации (collection[i]), включая отрицательные индексы.
-        collection[-1] – последний элемент.
         """
         if not isinstance(index, int):
             raise TypeError("Index must be integer")
@@ -111,7 +110,7 @@ class AthleteCollection:
         """
         self._items.sort(key=key, reverse=reverse)
 
-    # Фильтрующие методы, возвращающие новую коллекцию (логические операции)
+    # Фильтрующие методы, возвращающие новую коллекцию 
     def filter_active(self):
         """Вернуть новую коллекцию только с активными спортсменами."""
         new_col = AthleteCollection()
