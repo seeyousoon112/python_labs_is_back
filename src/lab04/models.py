@@ -1,7 +1,4 @@
-"""
-Модели для ЛР-4: классы-наследники от существующих (Athlete, CompetitiveAthlete, RecreationalAthlete)
-с реализацией интерфейсов Printable и Comparable.
-"""
+
 
 from src.lab03.base import Athlete
 from src.lab03.models import CompetitiveAthlete as BaseCompetitiveAthlete
