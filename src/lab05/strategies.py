@@ -72,16 +72,16 @@ def extract_name(athlete):
 
     return athlete.name
 
-def apply_discountпшк(discount):
+def apply_fix(discount):
 
-    def discount_func(athlete):
+    def fix_func(athlete):
         new_record = athlete.personal_record * (1 - discount)
         try:
             athlete.personal_record = new_record
         except (RuntimeError, ValueError) as e:
             print(f"Не удалось применить скидку к {athlete.name}: {e}")
         return athlete
-    return discount_func
+    return fix_func
 
 def increase_morale(delta):
     def func(athlete):
