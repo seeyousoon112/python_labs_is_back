@@ -72,10 +72,10 @@ def extract_name(athlete):
 
     return athlete.name
 
-def apply_fix(discount):
+def apply_fix(fix):
 
     def fix_func(athlete):
-        new_record = athlete.personal_record * (1 - discount)
+        new_record = athlete.personal_record * (1 - fix)
         try:
             athlete.personal_record = new_record
         except (RuntimeError, ValueError) as e:
