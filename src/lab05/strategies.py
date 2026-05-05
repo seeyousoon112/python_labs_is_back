@@ -72,7 +72,7 @@ def extract_name(athlete):
 
     return athlete.name
 
-def apply_discount(discount):
+def apply_discountпшк(discount):
 
     def discount_func(athlete):
         new_record = athlete.personal_record * (1 - discount)
