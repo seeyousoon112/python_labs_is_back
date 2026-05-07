@@ -1,43 +1,34 @@
-
-import sys
-import os
-
-# Добавляем корневую директорию проекта в путь поиска модулей
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-from . import validate
+# src/lab01/model.py
+from src.lab01 import validate
 
 class Athlete:
+    # Атрибуты класса (с аннотациями)
+    total_athletes: int = 0
+    sport_type: str = "running"
+    default_training_level: str = "beginner"
+    max_morale: int = 10
+    min_morale: int = 0
+    weight_unit: str = "kg"
+    height_unit: str = "cm"
+    record_unit: str = "kg"
 
-    total_athletes = 0
-    sport_type = "running"
-    default_training_level = "beginner"
-    max_morale = 10
-    min_morale = 0
-    weight_unit = "kg"
-    height_unit = "cm"
-    record_unit = "kg"
-
-    def __init__(self, name: str, weight: float, height: float, record: float = 0.0):
-        # Валидация входных данных
+    def __init__(self, name: str, weight: float, height: float, record: float = 0.0) -> None:
         validate.validate_name(name)
         validate.validate_weight(weight)
         validate.validate_height(height)
         validate.validate_record(record)
 
-        self._name = name.strip()
-        self._weight = weight
-        self._height = height
-        self._personal_record = record
-
-        # Состояния
-        self._is_active = True
-        self._health_status = "healthy"
-        self._training_level = Athlete.default_training_level
-        self._morale = Athlete.max_morale
+        self._name: str = name.strip()
+        self._weight: float = weight
+        self._height: float = height
+        self._personal_record: float = record
+        self._is_active: bool = True
+        self._health_status: str = "healthy"
+        self._training_level: str = Athlete.default_training_level
+        self._morale: int = Athlete.max_morale
 
         Athlete.total_athletes += 1
 
-    # Свойства (геттеры) для всех атрибутов
     @property
     def name(self) -> str:
         return self._name
@@ -66,19 +57,15 @@ class Athlete:
 
     @personal_record.setter
     def personal_record(self, value: float) -> None:
-        # Проверка состояния здоровья и активности
         if not self._is_active:
             raise RuntimeError("Cannot change record of inactive athlete")
         if self._health_status == "injured":
             raise RuntimeError("Cannot change record while injured")
         if self._health_status == "recovering":
             print("Warning: Athlete is recovering, setting record may be risky.")
-
-        # Проверка ограничений по уровню подготовки
         max_record = self._max_record_for_level()
         if value > max_record:
             raise ValueError(f"Record {value} exceeds maximum allowed for level {self._training_level} ({max_record})")
-
         validate.validate_record(value)
         self._personal_record = value
 
@@ -104,7 +91,6 @@ class Athlete:
             raise ValueError(f"Morale must be between {Athlete.min_morale} and {Athlete.max_morale}")
         self._morale = value
 
-    # Методы изменения состояний
     def activate(self) -> None:
         self._is_active = True
 
@@ -118,14 +104,12 @@ class Athlete:
         self._health_status = "recovering"
 
     def heal(self) -> None:
-        """Полное излечение (становится здоровым)."""
         self._health_status = "healthy"
 
     def set_training_level(self, level: str) -> None:
         validate.validate_training_level(level)
         self._training_level = level
 
-    # рекордики тутс тутс
     def _max_record_for_level(self) -> float:
         limits = {
             "beginner": 100,
@@ -135,17 +119,22 @@ class Athlete:
         }
         return limits[self._training_level]
 
-    # Бизнес бизнес
     def set_record(self, new_record: float) -> None:
-        """Установить новый личный рекорд (использует сеттер)."""
         self.personal_record = new_record
 
     def bmi(self) -> float:
-        """Индекс жира."""
         height_m = self._height / 100
         return round(self._weight / (height_m ** 2), 2)
 
-    # Магия
+    # Для протоколов (оценка 5)
+    def display(self) -> str:
+        """Реализует протокол Displayable."""
+        return f"{self.name}: {self.weight}{self.weight_unit}, record {self.personal_record}{self.record_unit}"
+
+    def score(self) -> float:
+        """Реализует протокол Scorable. Используем личный рекорд как оценку."""
+        return self.personal_record
+
     def __str__(self) -> str:
         status = "active" if self._is_active else "inactive"
         return (f"Athlete: {self._name}, weight: {self._weight}{Athlete.weight_unit}, "
@@ -158,10 +147,9 @@ class Athlete:
         return (f"Athlete(name='{self._name}', weight={self._weight}, "
                 f"height={self._height}, record={self._personal_record})")
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, Athlete):
             return False
-        # Сравниваем только базовые характеристики, состояния не учитываем
         return (self._name == other._name and
                 self._weight == other._weight and
                 self._height == other._height and
