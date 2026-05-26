@@ -7,11 +7,11 @@ from src.lab05.strategies import by_name, by_weight, by_record, by_rating
 from src.lab07.app import App
 from src.lab07.exceptions import DuplicateItemError, ItemNotFoundException, ValidationError
 
+
 def print_table(athletes: List[Athlete]) -> None:
     if not athletes:
         print("  Нет данных.")
         return
-    # Заголовок
     print(f"{'Имя':<15} {'Вес(кг)':<8} {'Рост(см)':<8} {'Рекорд(кг)':<10} {'Активен':<8} {'Здоровье':<12} {'Уровень':<12}")
     print("-" * 80)
     for a in athletes:
@@ -25,7 +25,8 @@ def print_table(athletes: List[Athlete]) -> None:
             elif isinstance(a, RecreationalAthlete):
                 print(f"  {a.name}: любитель, активность={a.favorite_activity}, удовольствие={a.enjoyment_level}")
 
-def input_athlete() -> Athlete:
+
+def input_athlete(app: App) -> Athlete:
     print("\n--- Добавление спортсмена ---")
     name = input("Имя: ").strip()
     if not name:
@@ -39,22 +40,25 @@ def input_athlete() -> Athlete:
     
     print("Тип спортсмена: 1 - обычный, 2 - соревновательный, 3 - любитель")
     type_choice = input("Выберите тип: ")
+    
     if type_choice == "2":
         try:
             wins = int(input("Количество побед: "))
             rating = float(input("Рейтинг: "))
         except ValueError:
             raise ValidationError("Победы и рейтинг должны быть числами")
-        return CompetitiveAthlete(name, weight, height, record, wins, rating)
+        return app.create_athlete(type_choice, name, weight, height, record, wins=wins, rating=rating)
     elif type_choice == "3":
         activity = input("Любимое занятие: ")
         try:
             enjoyment = int(input("Уровень удовольствия (1-10): "))
         except ValueError:
             raise ValidationError("Уровень удовольствия должен быть числом")
-        return RecreationalAthlete(name, weight, height, record, activity, enjoyment)
+        return app.create_athlete(type_choice, name, weight, height, record,
+                                  favorite_activity=activity, enjoyment_level=enjoyment)
     else:
-        return Athlete(name, weight, height, record)
+        return app.create_athlete(type_choice, name, weight, height, record)
+
 
 def run() -> None:
     app = App("athletes.json")
@@ -78,17 +82,14 @@ def run() -> None:
         
         elif choice == "1":
             try:
-                athlete = input_athlete()
+                athlete = input_athlete(app)
                 app.add_athlete(athlete)
                 print(f"Спортсмен '{athlete.name}' добавлен.")
             except (DuplicateItemError, ValidationError) as e:
                 print(f"Ошибка: {e}")
-            except Exception as e:
-                print(f"Непредвиденная ошибка: {e}")
         
         elif choice == "2":
-            athletes = app.get_all()
-            print_table(athletes)
+            print_table(app.get_all())
         
         elif choice == "3":
             name = input("Введите имя для поиска: ")

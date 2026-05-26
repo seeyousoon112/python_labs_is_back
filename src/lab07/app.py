@@ -8,28 +8,37 @@ import src.lab05.strategies as strat
 from src.lab07.exceptions import DuplicateItemError, ItemNotFoundException
 import src.lab07.storage as storage
 
-class App:
 
-    
+class App:
     def __init__(self, data_file: str = "athletes.json") -> None:
         self.data_file = data_file
         self.collection: TypedCollection[Athlete] = TypedCollection[Athlete]()
         self._load_data()
     
     def _load_data(self) -> None:
-
         athletes = storage.load(self.data_file)
         for a in athletes:
             try:
                 self.collection.add(a)
             except ValueError:
-
                 pass
     
     def _save_data(self) -> None:
-
         storage.save(self.collection.get_all(), self.data_file)
     
+
+    def create_athlete(self, type_choice: str, name: str, weight: float, height: float, record: float,
+                       wins: int = 0, rating: float = 1000.0,
+                       favorite_activity: str = "", enjoyment_level: int = 5) -> Athlete:
+    
+        if type_choice == "2":
+            return CompetitiveAthlete(name, weight, height, record, wins, rating)
+        elif type_choice == "3":
+            return RecreationalAthlete(name, weight, height, record, favorite_activity, enjoyment_level)
+        else:
+            return Athlete(name, weight, height, record)
+    
+
     def add_athlete(self, athlete: Athlete) -> None:
         try:
             self.collection.add(athlete)
@@ -58,7 +67,6 @@ class App:
         return self.collection.get_all()
     
     def apply_to_all(self, func: Callable[[Athlete], Any]) -> List[Any]:
-
         return self.collection.map(func)
     
     def exit(self) -> None:
